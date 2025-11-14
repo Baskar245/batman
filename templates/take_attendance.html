@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Take Attendance - AI Attendance</title>
+<style>
+body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #f0f0f0;
+    padding: 20px;
+}
+h1 {
+    color: #00e6e6;
+    text-shadow: 0 0 10px #00e6e6;
+    text-align: center;
+}
+ul {
+    list-style: none;
+    padding: 0;
+}
+li {
+    margin: 10px 0;
+}
+a {
+    padding: 10px 20px;
+    background: #00c6ff;
+    color: #000;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+a:hover {
+    background: #00ffff;
+}
+</style>
+</head>
+<body>
+<h1>Select Class to Take Attendance</h1>
+<ul>
+{% for cls in classes %}
+<li>
+<a href="{{ url_for('attendance_table', class_id=cls[0]) }}">
+    {{ cls[1] }} {{ cls[2] }} {{ cls[3] }} ({{ cls[4] }} Students)
+</a>
+</li>
+{% endfor %}
+</ul>
+</body>
+</html>

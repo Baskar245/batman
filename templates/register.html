@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register - AI Attendance</title>
+<style>
+body{font-family:"Poppins",sans-serif; background:linear-gradient(135deg,#0f2027,#203a43,#2c5364); color:#f0f0f0; display:flex; align-items:center; justify-content:center; height:100vh; flex-direction:column; padding:20px;}
+h1{color:#00e6e6; text-align:center; text-shadow:0 0 10px #00e6e6; margin-bottom:20px;}
+form{background: rgba(255,255,255,0.1); padding:30px; border-radius:15px; box-shadow:0 0 15px rgba(0,0,0,0.3); width:90%; max-width:400px;}
+input{width:100%; padding:10px; margin:10px 0; border:none; border-radius:8px; background:rgba(255,255,255,0.15); color:#fff;}
+button{width:100%; padding:10px; border:none; border-radius:8px; cursor:pointer; background:#00c6ff; color:#000; font-weight:bold;}
+</style>
+</head>
+<body>
+<h1>Register - AI Attendance</h1>
+<form action="/register" method="POST">
+  <input type="text" name="username" placeholder="Create Username" required>
+  <input type="password" name="password" placeholder="Create Password" required>
+  <button type="submit">Register</button>
+</form>
+<p style="margin-top:15px; color:#fff;">Already have an account? <a href="/" style="color:#00e6e6;">Login here</a></p>
+</body>
+</html>

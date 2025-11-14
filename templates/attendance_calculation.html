@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Attendance Calculation</title>
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #f0f0f0;
+  padding: 20px;
+  margin: 0;
+}
+.container {
+  max-width: 1000px;
+  margin: auto;
+  background: rgba(0,0,0,0.4);
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 0 25px rgba(0, 230, 230, 0.4);
+}
+h1 {
+  text-align: center;
+  color: #00e6e6;
+  text-shadow: 0 0 10px #00e6e6;
+  margin-bottom: 20px;
+}
+form { text-align:center; margin-bottom:18px; }
+input {
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  margin: 5px;
+  background: #1b2838;
+  color: white;
+}
+button {
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 5px;
+  transition: 0.2s ease;
+}
+button:hover { transform: scale(1.03); }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+th, td {
+  border: 1px solid #00c6ff;
+  padding: 10px;
+  text-align: center;
+  border-radius: 6px;
+}
+th { background-color: #00c6ff; color: #000; }
+td.green { color: #00ff88; font-weight: bold; }
+td.red   { color: #ff4d4d; font-weight: bold; }
+.message { text-align:center; color:#ffb3b3; margin-top:12px; font-weight:bold; }
+.back { text-align:center; margin-top:18px; }
+a.link { color:#00c6ff; text-decoration:none; font-weight:bold; }
+a.link:hover { text-decoration:underline; }
+.info {
+  text-align:center;
+  margin-bottom: 12px;
+  color: #bfeff0;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>
+    {% if class_info %}{{ class_info[0] }} {{ class_info[1] }} - {{ class_info[2] }}{% else %}Attendance Summary{% endif %}
+  </h1>
+
+  <div class="info">
+    {% if single_date %}Showing for <strong>{{ single_date }}</strong>.{% elif start_date and end_date %}Showing from <strong>{{ start_date }}</strong> to <strong>{{ end_date }}</strong>.{% elif message is none and students %}Showing results for selected filter.{% endif %}
+  </div>
+
+  <form method="POST">
+    <div>
+      <label><b>📅 Particular Date:</b></label>
+      <input type="date" name="single_date" value="{{ single_date or '' }}">
+      <button type="submit" name="action" value="single">Show</button>
+    </div>
+
+    <div style="margin-top:8px;">
+      <label><b>📆 From:</b></label>
+      <input type="date" name="start_date" value="{{ start_date or '' }}">
+      <label><b>To:</b></label>
+      <input type="date" name="end_date" value="{{ end_date or '' }}">
+      <button type="submit" name="action" value="range">Show Range</button>
+    </div>
+
+    <div style="margin-top:8px;">
+      <button type="submit" name="action" value="all">🗓️ Show All Attendance</button>
+    </div>
+  </form>
+
+  {% if message %}
+    <p class="message">{{ message }}</p>
+  {% else %}
+
+    {% if not students %}
+      <p class="message">No attendance records found for the selected criteria.</p>
+    {% else %}
+    <table>
+      <thead>
+        <tr>
+          <th>Reg No</th>
+          <th>Name</th>
+          <th>Present</th>
+          <th>Total</th>
+          <th>Percentage</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td>{{ s.regno }}</td>
+          <td>{{ s.name }}</td>
+          <td class="green">{{ s.present }}</td>
+          <td>{{ s.total }}</td>
+          <td>{{ s.percent }}%</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+
+  {% endif %}
+
+  <div class="back">
+    {% if class_info %}
+      <a class="link" href="{{ url_for('attendance_table', class_id=class_info[3]) }}">← Back to Attendance Table</a>
+    {% else %}
+      <a class="link" href="{{ url_for('dashboard', username=session.get('username','')) }}">← Back to Dashboard</a>
+    {% endif %}
+  </div>
+
+</div>
+</body>
+</html>

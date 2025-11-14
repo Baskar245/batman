@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Report</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #2c3e50, #4ca1af);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            text-shadow: 2px 2px #000;
+        }
+        .filter-box {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px auto;
+            width: 80%;
+        }
+        input[type="date"], button {
+            padding: 8px 15px;
+            border-radius: 6px;
+            border: none;
+            margin: 5px;
+        }
+        button {
+            background: #27ae60;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #219150;
+        }
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+        }
+        th, td {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .summary {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            width: 70%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>?? Attendance Report</h1>
+
+    <!-- Filter Section -->
+    <div class="filter-box">
+        <form method="GET" action="/attendance_table">
+            <label for="filter_date">Select Date:</label>
+            <input type="date" id="filter_date" name="filter_date" value="{{ request.args.get('filter_date', '') }}">
+            <br><br>
+            <label>From:</label>
+            <input type="date" name="from_date" value="{{ request.args.get('from_date', '') }}">
+            <label>To:</label>
+            <input type="date" name="to_date" value="{{ request.args.get('to_date', '') }}">
+            <button type="submit">?? Show Attendance</button>
+        </form>
+    </div>
+
+    {% if attendance_dict %}
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Student Name</th>
+            <th>Status</th>
+        </tr>
+        {% for date, records in attendance_dict.items() %}
+            {% for entry in records %}
+            <tr>
+                <td>{{ date }}</td>
+                <td>{{ entry['time'] }}</td>
+                <td>{{ entry['name'] }}</td>
+                <td style="color: {{ 'lime' if entry['status'] == 'Present' else 'tomato' }}">
+                    {{ entry['status'] }}
+                </td>
+            </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+
+    <!-- Summary Section -->
+    <div class="summary">
+        <h2>Summary ({{ from_date or 'All Dates' }} ? {{ to_date or 'All Dates' }})</h2>
+        <p><b>Total Sessions:</b> {{ total_classes }}</p>
+        <p><b>Students:</b> {{ student_count }}</p>
+        <p><b>Average Attendance %:</b> {{ avg_percentage }}%</p>
+    </div>
+    {% else %}
+    <h3>No attendance records found for the selected date(s).</h3>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - AI Attendance</title>
+<style>
+body{
+  font-family:"Poppins",sans-serif;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  color:#f0f0f0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  min-height:100vh;
+  padding:20px;
+}
+h1{
+  color:#00e6e6;
+  text-shadow:0 0 10px #00e6e6;
+  margin-bottom:30px;
+}
+button{
+  padding:10px 20px;
+  margin:10px;
+  font-size:16px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+}
+#createClass{background:#4CAF50; color:#fff;}
+#takeAttendance{background:#FF9800; color:#fff;}
+.studentBtn{background:#2196F3; color:#fff;}
+.class-list{
+  margin-top:20px;
+  width:100%;
+  max-width:600px;
+}
+.class-item{
+  background:rgba(255,255,255,0.1);
+  padding:10px;
+  margin-bottom:10px;
+  border-radius:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+</style>
+</head>
+<body>
+<h1>Welcome, {{ username }}</h1>
+
+<button id="createClass" onclick="location.href='/create_class/{{ username }}'">+ Create Log Book</button>
+<button id="takeAttendance" onclick="location.href='/take_attendance/{{ username }}'">Take Attendance</button>
+
+<div class="class-list">
+{% if classes %}
+  {% for cls in classes %}
+  <div class="class-item">
+    <span>{{ cls[1] }} - {{ cls[2] }} - {{ cls[3] }} ({{ cls[4] }} Students)</span>
+    <button class="studentBtn" onclick="location.href='/student_entry/{{ cls[0] }}'">Enter Students</button>
+  </div>
+  {% endfor %}
+{% else %}
+  <p>No classes created yet.</p>
+{% endif %}
+</div>
+
+</body>
+</html>
